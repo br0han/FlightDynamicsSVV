@@ -1,12 +1,27 @@
+clear all
+clc
 %Asymmetric equations of Motion in State Space System
 
 % Parameters
 
-mu_b = 100;
-C_L = 1;
+hp0    = 1000;      	  % pressure altitude in the stationary flight condition [m]
+V0     = 200;            % true airspeed in the stationary flight condition [m/sec]
+m      = 4500;         % Kg
+
+rho0   = 1.2250;          % air density at sea level [kg/m^3] 
+lambda = -0.0065;         % temperature gradient in ISA [K/m]
+Temp0  = 288.15;          % temperature at sea level in ISA [K]
+R      = 287.05;          % specific gas constant [m^2/sec^2K]
+g      = 9.81;            % [m/sec^2] (gravity constant)
+
+rho    = rho0*((1+(lambda*hp0/Temp0)))^(-((g/(lambda*R))+1));   % [kg/m^3]  (air density)
+W      = m*g;
 b = 15.911;
-V = 100;
 S = 30;
+mu_b = m/(rho*S*b);
+C_L = 2*W/(rho*V0^2*S);
+V = V0;
+
 
 
 Cy_bt_dot = 0;
@@ -58,8 +73,8 @@ C_3 = [-Cy_da*(2*V/b), -Cy_dr*(2*V/b); 0,0 ; -Cl_da*(2*V/b), -Cl_dr*(2*V/b) ; -C
 Aa = -inv(C_1)*C_2;
 Ba = -inv(C_1)*C_3;
 Ca = eye(4);
-Da = 0;
+Da = zeros(4,2);
 
 sys_a = ss(Aa,Ba,Ca,Da);
-step(sys_a);
+impulse(sys_a);
 
