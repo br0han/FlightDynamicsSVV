@@ -49,37 +49,41 @@ Cl_r = +0.23760;
 Cl_da = -0.23088;
 Cl_dr = +0.03440;
 
+%Defining Constants
 
-% Rewritten form 
-% C1*x_dot + C2*x + C3*u = 0
+y_bt = (V/b)*(Cy_bt/(2*mu_b));
+y_phi = (V/b)*(C_L/(2*mu_b));
+y_p = (V/b)*(Cy_p/(2*mu_b));
+y_r = (V/b)*((Cy_r -(4*mu_b))/(2*mu_b));
+y_da = (V/b)*(Cy_da/(2*mu_b));
+y_dr = (V/b)*(Cy_dr/(2*mu_b));
 
-C_1 = [(Cy_bt_dot - 2*mu_b)*(b/V),0,0,0; 0,-(b/(2*V)),0,0; 0,0,(-4*mu_b*(K_x^2)*(b/V)),(4*mu_b*K_xz*(b/V));
-    Cn_bt_dot*(b/V),0,(4*mu_b*K_xz*(b/V)),(-4*mu_b*(K_z^2)*(b/V))];
+const_intm = 4*mu_b*((K_x^2)*(K_z^2) - (K_xz^2));
+l_bt = (V/b)*((Cl_bt*(K_z^2)) + ((Cn_bt)*K_xz))/const_intm;
+l_p = (V/b)*((Cl_p*(K_z^2)) + ((Cn_p)*K_xz))/const_intm;
+l_r = (V/b)*((Cl_r*(K_z^2)) + ((Cn_r)*K_xz))/const_intm;
+l_da = (V/b)*((Cl_da*(K_z^2)) + ((Cn_da)*K_xz))/const_intm;
+l_dr = (V/b)*((Cl_dr*(K_z^2)) + ((Cn_dr)*K_xz))/const_intm;
 
-C_2 = [Cy_bt,C_L ,Cy_p,(Cy_r - (4*mu_b)); 0,0,1,0; Cl_bt,0,Cl_p,Cl_r;
-    Cn_bt,0,Cn_p,Cn_r];
+n_bt = (V/b)*((Cl_bt*(K_xz)) + ((Cn_bt)*(K_x^2)))/const_intm;
+n_p = (V/b)*((Cl_p*(K_xz)) + ((Cn_p)*(K_x^2)))/const_intm;
+n_r = (V/b)*((Cl_r*(K_xz)) + ((Cn_r)*(K_x^2)))/const_intm;
+n_da = (V/b)*((Cl_da*(K_xz)) + ((Cn_da)*(K_x^2)))/const_intm;
+n_dr = (V/b)*((Cl_dr*(K_xz)) + ((Cn_dr)*(K_x^2)))/const_intm;
 
-C_3 = [Cy_da, Cy_dr; 0,0 ; Cl_da, Cl_dr ; Cn_da, Cn_dr];
+% State Space Matrix
+A_as = [y_bt,y_phi,y_p,y_r; 0,0,(2*V/b),0; l_bt,0,l_p,l_r; n_bt,0,n_p,n_r];
 
+B_as = [0,y_dr; 0,0; l_da,l_dr; n_da,n_dr];
 
-% State Space System
+C_as = eye(4);
+C_as(3,3) = (2*V/b);
+C_as(4,4) = (2*V/b);
 
-% y = x (chosen output vector is same as state vector)
-% Aa = -(C1^-1)*C2
-% Ba = - (C1^-1)*C3
-% Ca = Identity(4)
-% Da = null vector
+D_as = zeros(4,2);
 
-Aa = inv(-1*C_1)*C_2;
-Ba = inv(-1*C_1)*C_3;
-Ca = eye(4);
-Da = zeros(4,2);
+sys_as = ss(A_as,B_as,C_as,D_as);
 
 t = linspace(0,50,100);
-sys_a = ss(Aa,Ba,Ca,Da);
-figure();
-impulse(sys_a,t);
-figure();
-step(sys_a,t);
-eig(Aa)
-
+impulse(sys_as,t);
+eig(A_as)
