@@ -46,9 +46,19 @@ Cm_al_dot = +0.17800;
 Cm_q = -8.79415;
 Cm_de = -1.1642;
 
-C_1 = [-2*mu_c/V,0,0,0; 0,Cz_al_dot-2*mu_c,0,0;0,0,-1,0;0,Cm_al_dot,0,-2*mu_c*K_Y^2*c_bar/V];
-C_2 = [Cx_u/c_bar,Cx_al*V/c_bar,Cz_o*V/c_bar,Cx_q;Cz_u/c_bar,Cz_al*V/c_bar,Cx_o*V/c_bar,Cz_q+2*mu_c;0,0,0,1;Cm_u/c_bar,Cm_al*V/c_bar,0,Cm_q];
-C_3 = [Cx_de*V/c_bar;Cz_de*V/c_bar;0;Cm_de*V/c_bar];
+Q = c_bar/V
+
+% C_1 = [-2*mu_c/c_bar,0,0,0; 0,Cz_al_dot-2*mu_c,0,0;0,0,-1,0;0,Cm_al_dot,0,-2*mu_c*K_Y^2*c_bar/V];
+% C_2 = [Cx_u/c_bar,Cx_al*V/c_bar,Cz_o*V/c_bar,Cx_q;Cz_u/c_bar,Cz_al*V/c_bar,Cx_o*V/c_bar,Cz_q+2*mu_c;0,0,0,1;Cm_u/c_bar,Cm_al*V/c_bar,0,Cm_q];
+% C_3 = [Cx_de*V/c_bar;Cz_de*V/c_bar;0;Cm_de*V/c_bar];
+
+C_1 = [-2*mu_c*Q,0,0,0; 0,(Cz_al_dot-2*mu_c)*Q,0,0;0,0,-Q,0;0,Cm_al_dot*Q,0,-2*mu_c*K_Y^2*Q];
+C_2 = [-Cx_u,-Cx_al,-Cz_o,-Cx_q;-Cz_u,-Cz_al,Cx_o,-(Cz_q+2*mu_c);0,0,0,-1;-Cm_u,-Cm_al,0,-Cm_q];
+C_3 = [-Cx_de;-Cz_de;0;-Cm_de];
+
+C_2 = -C_2;
+C_3 = -C_3;
+
 
 As = -inv(C_1) * C_2;
 Bs = -inv(C_1) * C_3;
@@ -56,10 +66,36 @@ Bs = -inv(C_1) * C_3;
 Cs = eye(4);
 Ds = 0;
 
-sys_s = ss(As,Bs,Cs,Ds)
+sys_s = ss(As,Bs,Cs,Ds);
 
-step(-sys_s, 0:0.01:12);
-%x_dot = A*x + B*u
-%y = C*x + D*u
+init = [0,0,25/180*pi,0];
+t = 0:0.1:10000;
+step = ones(1, length(t));
+% [y,t]=step(0.1*sys_s);
 
-eig(As);
+[y, t] = lsim(sys_s, 0.01*step, t, init);
+
+subplot(4, 1, 1);
+plot(t, y(:, 1));
+xlabel("time [s]")
+ylabel("u [m/s]")
+grid on
+subplot(4, 1, 2);
+plot(t, y(:, 2));
+xlabel("time [s]")
+ylabel("AoA [rad]")
+grid on
+
+subplot(4, 1, 3);
+plot(t, y(:, 3));
+xlabel("time [s]")
+ylabel("theta [rad]")
+grid on
+
+subplot(4, 1, 4);
+plot(t, y(:, 4));
+xlabel("time [s]")
+ylabel("q [rad/s]")
+grid on
+
+eig(As)

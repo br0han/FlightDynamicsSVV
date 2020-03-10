@@ -1,4 +1,4 @@
-clear; close all;
+clear; close all; clc;
 
 %Symmetric equations of motion in state space system
 
@@ -10,7 +10,7 @@ c_bar = 2.0569 ;
 th0 = 0;
 
 hp0    = 5000;      	  % pressure altitude in the stationary flight condition [m]
-V0     = 90;             % true airspeed in the stationary flight condition [m/sec]
+V0     = 100;             % true airspeed in the stationary flight condition [m/sec]
 m      = 9500;            % Kg
 
 rho0   = 1.2250;          % air density at sea level [kg/m^3] 
@@ -27,6 +27,7 @@ mu_c = m/(rho*S*c_bar);
 C_L = 2*W/(rho*V0^2*S);
 V = V0;
 
+Q = 1;%V/c_bar;
 
 
 Cx_o = W*sin(th0)/(0.5*rho*V0^2*S);
@@ -48,35 +49,38 @@ Cm_al_dot = +0.17800;
 Cm_q = -8.79415;
 Cm_de = -1.1642;
 
-X_u  = V/c_bar * Cx_u/(2*mu_c);
-X_al = V/c_bar * Cx_al/(2*mu_c);
-X_th = V/c_bar * Cz_o/(2*mu_c);
-X_q  = V/c_bar * Cx_q/(2*mu_c);
-X_de = V/c_bar * Cx_de/(2*mu_c);
+X_u  = Q * Cx_u/(2*mu_c);
+X_al = Q * Cx_al/(2*mu_c);
+X_th = Q * Cz_o/(2*mu_c);
+X_q  = Q * Cx_q/(2*mu_c);
+X_de = Q * Cx_de/(2*mu_c);
 
-Z_u  = V/c_bar * Cz_u/(2*mu_c - Cz_al_dot);
-Z_al = V/c_bar * Cz_al/(2*mu_c - Cz_al_dot);
-Z_th = - V/c_bar * Cx_o/(2*mu_c - Cz_al_dot);
-Z_q  = V/c_bar * (2*mu_c + Cz_q)/(2*mu_c - Cz_al_dot);
-Z_de = V/c_bar * Cz_de/(2*mu_c - Cz_al_dot);
+Z_u  = Q * Cz_u/(2*mu_c - Cz_al_dot);
+Z_al = Q * Cz_al/(2*mu_c - Cz_al_dot);
+Z_th = - Q * Cx_o/(2*mu_c - Cz_al_dot);
+Z_q  = Q * (2*mu_c + Cz_q)/(2*mu_c - Cz_al_dot);
+Z_de = Q * Cz_de/(2*mu_c - Cz_al_dot);
 
-m_u  =  V/c_bar * (Cm_u  + Cz_u  *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
-m_al =  V/c_bar * (Cm_al + Cz_al *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
-m_th = -V/c_bar * (        Cx_o  *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
-m_q  =  V/c_bar * (Cm_q  +        Cm_al_dot*(2*mu_c + Cz_q) /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
-m_de =  V/c_bar * (Cm_de + Cz_de *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
+m_u  =  Q * (Cm_u  + Cz_u  *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
+m_al =  Q * (Cm_al + Cz_al *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
+m_th = -Q * (        Cx_o  *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
+m_q  =  Q * (Cm_q  +        Cm_al_dot*(2*mu_c + Cz_q) /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
+m_de =  Q * (Cm_de + Cz_de *Cm_al_dot                /(2*mu_c - Cz_al_dot))/(2*mu_c*K_Y^2);
 
-As = [X_u,X_al,X_th,0;Z_u,Z_al,Z_th,Z_q;0,0,0,V/c_bar;m_u,m_al,m_th,m_q];
+As = [X_u,X_al,X_th,0;Z_u,Z_al,Z_th,Z_q;0,0,0,Q;m_u,m_al,m_th,m_q];
 Bs = [X_de;Z_de;0;m_de];
 
 Cs = [V,0,0,0;0,1,0,0;0,0,1,0;0,0,0,V/c_bar];
 Ds = 0;
 
 sys_s = ss(As,Bs,Cs,Ds);
+init = [0,0,0,0];
+t = 0:0.1:100000;
+step = ones(1, length(t));
+% [y,t]=step(0.1*sys_s);
 
-[y,t]=step(-sys_s, 0:0.01:20);
-%impulse(-sys_s, 0:0.01:12);
-%initial(sys_s, [V, 0,0,0])
+[y, t] = lsim(sys_s, 0.001*step, t, init);
+
 subplot(4, 1, 1);
 plot(t, y(:, 1));
 xlabel("time [s]")
@@ -97,7 +101,7 @@ plot(t, y(:, 4));
 xlabel("time [s]")
 ylabel("q [rad/s]")
 
-eig(As);
+eig(As)
 
 
 
