@@ -74,7 +74,6 @@ for i= 1:sz(1)
     Frho(i,1)=rho0*((1+(lambda*FAlt(i)/Temp0)))^(-((g/(lambda*R))+1));
 end
 
-
 SCL=zeros(sz(1),sz(2)); %Matrix containing CL for Sample data
 FCL=zeros(sz(1),sz(2)); %Matrix containing CL for Flight data
 for i= 1:sz(1)
