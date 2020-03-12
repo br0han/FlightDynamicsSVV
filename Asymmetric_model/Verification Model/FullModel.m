@@ -11,6 +11,8 @@ C = 2*mub*((CYb*Cnr - CYr*Cnb)*KX2 + (CYb*Clp - Clb*CYp)*KZ2 + ((CYb*Cnp - Cnb*C
 D = -4*mub*CL*(Clb*KZ2 + Cnb*KXZ) + 2*mub*(Clb*Cnp - Cnb*Clp) + (1/2)*(CYb*(Clr*Cnp - Cnr*Clp)) + (1/2)*(CYp*(Clb*Cnr - Cnb*Clr)) + (1/2)*(CYr*(Clp*Cnb - Cnp*Clb));
 
 E = CL*(Clb*Cnr - Cnb*Clr);
+
+R = B*C*D - A*(D^2) - (B^2)*E;
  
 lambdabs = roots([A B C D E])*(V0/b)
 
