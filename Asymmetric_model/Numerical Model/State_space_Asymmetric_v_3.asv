@@ -42,7 +42,7 @@ Ca(4,4) = 2/dim_cnst;
 Da = zeros(4,2);
 
 step_size = 0.01;
-tot_time = 20;
+tot_time = 50;
 
 aileron_pulsetime = 1;
 rudder_pulsetime = 1;
@@ -51,7 +51,7 @@ t = 0:step_size:tot_time;
 x_0 = [0,0,0,0];
 u = zeros(2,length(t));
 % u(2,1:rudder_pulsetime/step_size) = 0.025;
-u(1,1:10) = 1000;
+u()
 
 
 sys_a = ss(Aa,Ba,Ca,Da);
@@ -69,8 +69,7 @@ ylabel('j \eta')
 
 %Dynamic Response 
 figure();
-% lsim(sys_a,u,t);
-impulse(sys_a,t)
+lsim(sys_a,u,t);
 
 
 
