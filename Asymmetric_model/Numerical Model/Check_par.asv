@@ -1,6 +1,6 @@
-hp0    = 6900;      	  % pressure altitude in the stationary flight condition [m]
+%hp0    = 5000;      	  % pressure altitude in the stationary flight condition [m]
 V0    = 145;            % true airspeed in the stationary flight condition [m/sec]
-m      = 59020;         % Kg
+%m      = 9500;         % Kg
 
 rho0   = 1.2250;          % air density at sea level [kg/m^3] 
 lambda = -0.0065;         % temperature gradient in ISA [K/m]
@@ -14,7 +14,7 @@ W      = m*g;
 b = 37.49;
 S = 153.5;
 mub = 17.219;
-CL = 2*W/(rho*(V0^2)*S);
+CL = 2*;
 % V = V0;
 
 
@@ -26,9 +26,9 @@ CYr = 0.369;
 CYda = 0;
 CYdr = 0.215;
 
-KX2 = 0.0283;
+KX2 = 0.00127;
 KXZ = 0;
-KZ2 = 0.0471;
+KZ2 = 0.0342;
 
 
 Cnbdot = 0;
