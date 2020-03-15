@@ -41,4 +41,5 @@ function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, p
 	init = [0, 0, 0, 0];								% Initial Condition	
 	[responce, t_responce] = lsim(sys_a, input, time, init);
 	responce = responce + [beta0, phi0, p, r];
+    eig(Aa)
 end
