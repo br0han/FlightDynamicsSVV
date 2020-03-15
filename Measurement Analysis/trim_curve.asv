@@ -132,7 +132,7 @@ FVeq = zeros(sz(1),sz(2));
 SVeq = zeros(sz(1),sz(2));
 
 for i = 1:sz(1)
-    FVeq(i,1) = sqrt(gamma*R*FT(i,1))*FM(i,1)*sqrt(Frho(i,1)/rho0); % true airspeed = M*a , Veq = Vt*sqrt(rho/rho0)
+    FVeq(i,1) = sqrt(gamma*R*FT(i,1))*FM(i,1)*sqrt(Frho(i,1)/rho0); % true airspeed = M*a , Veq 
     SVeq(i,1) = sqrt(gamma*R*ST(i,1))*SM(i,1)*sqrt(Srho(i,1)/rho0);
 end
 

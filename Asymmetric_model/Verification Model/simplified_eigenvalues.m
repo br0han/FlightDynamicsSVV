@@ -13,4 +13,4 @@ D_da = 1/2 *(Clb * Cnp - Cnb * Clp);
 
 lamda_dutch = roots([A B C])*(V0/b);
 lamda_spiral = 2*CL*(Clb * Cnr - Cnb * Clr)/(Clp*( CYb * Cnr + 4*mub * Cnb) - Cnp*(CYb * Clr + 4*mub*Clb));
-lamda_dutch_aperiodic = roots([A_da B_da C_da D_da])
+lamda_dutch_aperiodic = roots([A_da B_da C_da D_da]);
