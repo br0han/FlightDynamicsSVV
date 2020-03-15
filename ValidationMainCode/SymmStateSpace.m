@@ -28,4 +28,5 @@ function [responce, t_responce] = SymmStateSpace(hp0, V0, alpha0, th0, m, q0, ti
 	init = [0, 0, 0, 0];								% Initial Condition	
 	[responce, t_responce] = lsim(sys_s, input, time, init);
 	responce = responce + [V0, alpha0, th0, q0];
+	eig(As)
 end

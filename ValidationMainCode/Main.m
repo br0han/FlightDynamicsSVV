@@ -60,7 +60,7 @@ for i = 1:length(asym_eigenMotions)
 	% Compute Responce of State Space model from recorded aileron and rudder input
 	idx0 = t_idxa(i, 1); idx1 = t_idxa(i, 2);
 	[y, time] = ASymmStateSpace(FD.h(idx0), FD.TAS(idx0), FD.AOA(idx0), FD.theta(idx0), 0, FD.phi(idx0), FD.roll_rate(idx0), ...
-											FD.yaw_rate(idx0), InitMass - FD.fuel_used_tot(idx0), FD.t(idx0: idx1) - FD.t(idx0), [FD.delta_a(idx0: idx1), FD.delta_r(idx0: idx1)]);
+											FD.yaw_rate(idx0), InitMass - FD.fuel_used_tot(idx0), FD.t(idx0: idx1) - FD.t(idx0), [FD.delta_a(idx0: idx1) - 0.01057, FD.delta_r(idx0: idx1) + 0.00659]);
 	% Plots
 	figure();
 	subplot(4, 1, 1);

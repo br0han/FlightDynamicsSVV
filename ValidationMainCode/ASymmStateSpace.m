@@ -31,6 +31,7 @@ function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, p
 	Ca = eye(4);
 	Ca(3, 3) = 2/dim_cnst;
 	Ca(4, 4) = 2/dim_cnst;
+	Ca = Ca*-1;
 	Da = zeros(4, 2);
 
 	sys_a = ss(Aa, Ba, Ca, Da);
@@ -38,6 +39,6 @@ function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, p
 	sys_a.InputName = {'Aileron', 'Rudder'};
 	sys_a.OutputName = {'\beta', '\phi', 'p', 'r'};
 	init = [0, 0, 0, 0];								% Initial Condition	
-	[responce, t_responce] = lsim(-sys_a, input, time, init);
+	[responce, t_responce] = lsim(sys_a, input, time, init);
 	responce = responce + [beta0, phi0, p, r];
 end

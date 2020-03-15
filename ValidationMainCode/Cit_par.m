@@ -72,6 +72,7 @@ CD = CD0 + (CLa*alpha0)^2/(pi*A*e);  % Drag coefficient [ ]
 
 CX0    = W*sin(th0)/(0.5*rho*V0^2*S);
 CXu    = -0.02792;
+% CXu    = -0.11; %
 CXa    = -0.47966;
 CXadot = +0.08330;
 CXq    = -0.28170;
@@ -79,8 +80,11 @@ CXde   = -0.03728;
 
 CZ0    = -W*cos(th0)/(0.5*rho*V0^2*S);
 CZu    = -0.37616;
+% CZu    = -2.1;	%
 CZa    = -5.74340;
+% CZa    = -6.8;
 CZadot = -0.00350;
+% CZadot = -0.05;
 CZq    = -5.66290;
 CZde   = -0.69612;
 

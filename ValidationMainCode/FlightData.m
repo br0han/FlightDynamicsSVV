@@ -9,14 +9,14 @@ function [FD, eigenMotions] = FlightData()
 	short_peroid_st = 56*60 + 50;							% Start time short period [s] p=44.0333333333 s
 	dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
 	dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
-	sprial_st = 1*3600 + 7*60 + 108;						% Start time sprial [s]
+	sprial_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
 	phugoid_st = 53*60 + 20;								% Start time phugoid [s]
 
 	motion_st = [phugoid_st, aperi_roll_st, short_peroid_st, ...
 		dutch_roll_st, dutch_roll_damp_st, sprial_st];
 
 	t_idx = zeros(length(motion_st), 2);
-	buffer = [175 35 20 15 15 50];
+	buffer = [175 35 20 15 15 200];
 	for i = 1:length(t_idx)
 		idx = find(t >= motion_st(i));
 		t_idx(i, 1) = idx(1);
@@ -28,7 +28,7 @@ function [FD, eigenMotions] = FlightData()
 	FD.t = t;
 	FD.t_idx = t_idx;
 	FD.TAS = fd.Dadc1_tas.data*0.51444444444;
-	FD.h = fd.Dadc1_alt.data;
+	FD.h = fd.Dadc1_alt.data*0.3048;
 	FD.AOA = fd.vane_AOA.data*pi/180;
 	FD.theta = fd.Ahrs1_Pitch.data*pi/180;
 	FD.phi = fd.Ahrs1_Roll.data*pi/180;
