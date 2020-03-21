@@ -1,6 +1,6 @@
 clear; close all; clc;
 % fd = importdata('C:\Users\Gebruiker\Documents\MATLAB\AE3212SA\matlab.mat');
-fd = importdata('C:\Users\Gebruiker\Documents\MATLAB\AE3212SA\FTISxprt-20200306_flight3.mat');
+fd = importdata('FTISxprt-20200306_flight3.mat');
 t = fd.time.data;
 %% Start time of eigen motions 
 eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Peroid", ...
@@ -51,6 +51,7 @@ subplot(2, 1, 1)
 yyaxis left
 title(eigenMotions(i))
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), TAS((t_idx(i, 1): t_idx(i, 2))));
+Phugoid_V = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), TAS(t_idx(i, 1): t_idx(i, 2))];
 ylabel("true airspeed [m/s]")
 
 yyaxis right
@@ -67,6 +68,7 @@ plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), AOA((t_idx(i, 1): t_idx(i, 2)
 ylabel("angle of attack [degrees]")
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), theta((t_idx(i, 1): t_idx(i, 2))));
+Phugoid_th = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), theta(t_idx(i, 1): t_idx(i, 2))];
 grid on
 ylabel("Pitch attack [degrees]")
 axis tight
@@ -79,10 +81,14 @@ i = 2;
 yyaxis left
 title(eigenMotions(i))
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), roll_rate((t_idx(i, 1): t_idx(i, 2))));
+Aperi_rollrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), roll_rate(t_idx(i, 1): t_idx(i, 2))];
+
 ylabel("Roll Rate [degree/s]")
 
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), yaw_rate((t_idx(i, 1): t_idx(i, 2))));
+Aperi_yawrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), yaw_rate(t_idx(i, 1): t_idx(i, 2))];
+
 axis tight
 grid on
 xlabel("time [s]")
@@ -122,10 +128,12 @@ i = 4;
 yyaxis left
 title(eigenMotions(i))
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), roll_rate((t_idx(i, 1): t_idx(i, 2))));
+Dutch_rollrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), roll_rate(t_idx(i, 1): t_idx(i, 2))];
 ylabel("Roll Rate [degree/s]")
 
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), yaw_rate((t_idx(i, 1): t_idx(i, 2))));
+Dutch_yawrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), yaw_rate(t_idx(i, 1): t_idx(i, 2))];
 axis tight
 grid on
 xlabel("time [s]")
@@ -137,10 +145,12 @@ i = 5;
 yyaxis left
 title(eigenMotions(i))
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), roll_rate((t_idx(i, 1): t_idx(i, 2))));
+D_Dutch_rollrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), roll_rate(t_idx(i, 1): t_idx(i, 2))];
 ylabel("Roll Rate [degree/s]")
 
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), yaw_rate((t_idx(i, 1): t_idx(i, 2))));
+D_Dutch_yawrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), yaw_rate(t_idx(i, 1): t_idx(i, 2))];
 axis tight
 grid on
 xlabel("time [s]")
