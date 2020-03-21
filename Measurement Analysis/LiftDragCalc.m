@@ -129,15 +129,15 @@ FCLMatrix=ones(sz(1),2);
 FCLMatrix(1:sz(1),1)=FAlpha;
 
 FCLSol=inv(FCLMatrix' *FCLMatrix)*FCLMatrix'*FCL;
-FClalpha=FCLSol(1,1);
-Clalpha0=FCLSol(2,1);
+FClalpha=FCLSol(1,1)
+Cl0alpha=FCLSol(2,1)
 
 
 FCDMatrix=ones(sz(1),2);
 FCDMatrix(1:sz(1),1)=FCL2;
 
 FCDSol=inv(FCDMatrix' *FCDMatrix)*FCDMatrix'*FCD;
-CD0=FCDSol(2,1);
+CD0=FCDSol(2,1)
 e=1/(pi*FCDSol(1,1)*b^2/S)
 
 plot(FCD,FAlpha)
