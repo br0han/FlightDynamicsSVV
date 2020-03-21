@@ -120,7 +120,7 @@ end
 
 % calculating the density using ideal gas low
 Srho= zeros(sz(1),sz(2));
-Frho= zeros(sz(1),sz(2));
+Frho= zeros(sz(1),sz(2));   
 
 for i= 1:sz(1)
     Srho(i,1) = Sp(i,1)/(R*ST(i,1));
