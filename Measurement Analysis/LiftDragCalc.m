@@ -82,6 +82,8 @@ FTempstatic=zeros(sz(1),sz(2)); %Static Air temperature Flight Data
 SVeloT=zeros(sz(1),sz(2));
 FVeloT=zeros(sz(1),sz(2));
 
+Freynolds=zeros(sz(1),sz(2));
+
 for i=1:sz(1)
     SStaticP(i,1)=p0*(1+(lambda*SAlt(i,1)/Temp0))^(-g/(lambda*R));
     FStaticP(i,1)=p0*(1+(lambda*FAlt(i,1)/Temp0))^(-g/(lambda*R));
@@ -100,6 +102,9 @@ for i=1:sz(1)
     
     Srho(i,1)=SStaticP(i,1)/(R* STempstatic(i,1));
     Frho(i,1)=FStaticP(i,1)/(R* FTempstatic(i,1));
+    
+    Freynolds(i,1)=Frho(i,1)*FVeloT(i,1)*c/mu;
+    
 end
 
 
@@ -123,12 +128,12 @@ for i=1:sz(1)
 end
 
 
-FCL2=FCL.^2
+FCL2=FCL.^2;
 
 FCLMatrix=ones(sz(1),2);
 FCLMatrix(1:sz(1),1)=FAlpha;
 
-FCLSol=inv(FCLMatrix' *FCLMatrix)*FCLMatrix'*FCL;
+FCLSol=(FCLMatrix' *FCLMatrix)\FCLMatrix'*FCL;
 FClalpha=FCLSol(1,1)
 Cl0alpha=FCLSol(2,1)
 
@@ -136,8 +141,34 @@ Cl0alpha=FCLSol(2,1)
 FCDMatrix=ones(sz(1),2);
 FCDMatrix(1:sz(1),1)=FCL2;
 
-FCDSol=inv(FCDMatrix' *FCDMatrix)*FCDMatrix'*FCD;
+FCDSol=(FCDMatrix' *FCDMatrix)\FCDMatrix'*FCD;
 CD0=FCDSol(2,1)
 e=1/(pi*FCDSol(1,1)*b^2/S)
 
-plot(FCD,FAlpha)
+
+LineCD=CD0:0.001:0.065;
+LineCL=sqrt(pi*b^2/S *e*(LineCD-CD0));
+
+LineAlpha=0:0.005:0.2;
+LineCL2=FClalpha*LineAlpha+Cl0alpha;
+
+figure(1)
+plot(LineCD,LineCL,'r')
+hold on
+scatter(FCD,FCL,"x",'b')
+xlabel('Drag Coefficient (C_D) [-]')
+ylabel('Lift Coefficient (C_L)[-]')
+
+legend('Line of Best Fit', 'Data from Measurements','Location','northwest')
+legend('boxoff')
+title('Drag polar for Mach number range of 0.22 to 0.46 and Re range of 7,000,000 to 15,000,000 for a clean configuration')
+
+figure(2)
+plot(LineAlpha,LineCL2,'r')
+hold on
+scatter(FAlpha,FCL,'x','b')
+xlabel('Angle of Attack (\alpha) [rad]')
+ylabel('Lift Coefficient (C_L)[-]')
+legend('Line of Best Fit', 'Data from Measurements','Location','northwest')
+legend('boxoff')
+title('Lift curve for Mach number range of 0.22 to 0.46 and Re range of 7,000,000 to 15,000,000 for a clean configuration')

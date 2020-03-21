@@ -26,4 +26,5 @@ Temp0  = 288.15;          % temperature at sea level in ISA [K]
 R      = 287.05;          % specific gas constant [m^2/sec^2K]
 g      = 9.81;            % [m/sec^2] (gravity constant)
 p0     = 101325;          %[Pa] (Pressure at Standard Sea level) 
-gamma  = 1.4   ;           %Ratio of specific heats for air 
+gamma  = 1.4   ;          %Ratio of specific heats for air 
+mu     = 1.73*10^-5;      %Dynamic viscosity of air
