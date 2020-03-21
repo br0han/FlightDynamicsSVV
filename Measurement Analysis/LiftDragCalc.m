@@ -115,6 +115,8 @@ FThrust = FThrustL+FThrustR;
 
 SCL=zeros(sz(1),sz(2)); %Matrix containing CL for Sample data
 FCL=zeros(sz(1),sz(2)); %Matrix containing CL for Flight data
+
+
 for i= 1:sz(1)
    SCL(i,1)=2* (STotPreMass-SFUsed(i,1))*g/(Srho(i,1)*SVeloT(i,1)^2*S);
    FCL(i,1)=2* (FTotPreMass-FFUsed(i,1))*g/(Frho(i,1)*FVeloT(i,1)^2*S);
