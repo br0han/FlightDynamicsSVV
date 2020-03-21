@@ -164,7 +164,7 @@ ylabel("u [m/s]", "Interpreter", "latex")
 yyaxis right
 % plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), h((t_idx(i, 1): t_idx(i, 2))));
 % hold on
-plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), delta_a((t_idx(i, 1): t_idx(i, 2))));
+plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), h((t_idx(i, 1): t_idx(i, 2))));
 axis tight
 grid on
 xlabel("t [s]", "Interpreter", "latex")
