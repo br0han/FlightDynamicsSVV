@@ -1,4 +1,4 @@
-function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, phi0, p, r, m, time, input)
+function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, phi0, p, r, m, time, input, init)
 	run("Cit_par.m");
 	% Rewritten form 
 	% C1*x_dot + C2*x + C3*u = 0
@@ -38,8 +38,6 @@ function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, p
 	sys_a.StateName = {'\beta', '\phi', 'p', 'r'};
 	sys_a.InputName = {'Aileron', 'Rudder'};
 	sys_a.OutputName = {'\beta', '\phi', 'p', 'r'};
-	init = [0, 0, 0, 0];								% Initial Condition	
 	[responce, t_responce] = lsim(sys_a, input, time, init);
 	responce = responce + [beta0, phi0, p, r];
-    eig(Aa)
 end

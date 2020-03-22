@@ -1,31 +1,32 @@
 clear; clc; close all;
-% fd = importdata('C:\Users\Gebruiker\Documents\MATLAB\AE3212SA\matlab.mat');
-fd = importdata('C:\Users\Gebruiker\Documents\MATLAB\AE3212SA\InitSS\FTISxprt-20200306_flight3V1.mat');
+%% Start time of eigenmotions (Reference Data)
+fd = importdata('matlab.mat');
+aperi_roll_st = 59*60 + 10;							% Start time aperiodic roll [s]
+short_peroid_st = 1*3600 + 0*60 + 33;					% Start time short period [s]
+dutch_roll_st = 1*3600 + 1*60 + 57;					% Start time Dutch roll [s]
+dutch_roll_damp_st = 1*3600 + 2*60 + 47;				% Start time Damped Dutch roll [s]
+spiral_st = 1*3600 + 5*60 + 20;						% Start time sprial [s]
+phugoid_st = 53*60 + 51;								% Start time phugoid [s]
+buffer = [211 35 12 12 12 160];
+
+%% Start time of eigenmotions (Our Filight data)
+% fd = importdata('FTISxprt-20200306_flight3V1.mat');
+% aperi_roll_st = 1*3600 + 1*60 + 15;						% Start time aperiodic roll [s]
+% short_peroid_st = 56*60 + 50;							% Start time short period [s]
+% dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
+% dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
+% sprial_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
+% phugoid_st = 53*60 + 20;								% Start time phugoid [s]
+% buffer = [175 35 20 15 15 180];
+
+%% Index Slicing
 t = fd.time.data;
-%% Start time of eigen motions 
 eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Peroid", ...
-				"Dutch Roll", "Dutch Roll Damped", "Sprial"];
-% aperi_roll_st = 59*60 + 10;					% Start time aperiodic roll [s]
-% short_peroid_st = 1*3600 + 0*60 + 35;		% Start time short period [s]
-% dutch_roll_st = 1*3600 + 1*60 + 57;			% Start time Dutch roll
-% [s]
-% dutch_roll_damp_st = 1*3600 + 2*60 + 47;	% Start time Damped Dutch roll [s]
-% sprial_st = 1*3600 + 5*60 + 20;				% Start time sprial [s]
-% phugoid_st = 53*60 + 57;					% Start time phugoid [s]
-% buffer = [211 35 10 12 12 160];
-
-aperi_roll_st = 1*3600 + 1*60 + 15;					% Start time aperiodic roll [s]
-short_peroid_st = 56*60 + 50;						% Start time short period [s] p=44.0333333333 s
-dutch_roll_st = 57*60 + 94;							% Start time Dutch roll [s]
-dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
-sprial_st = 1*3600 + 3*60 + 53;					% Start time sprial [s]
-phugoid_st = 53*60 + 20;								% Start time phugoid [s]
-
+				"Dutch Roll", "Dutch Roll Damped", "Spiral"];
 motion_st = [phugoid_st, aperi_roll_st, short_peroid_st, ...
-	dutch_roll_st, dutch_roll_damp_st, sprial_st];
+	dutch_roll_st, dutch_roll_damp_st, spiral_st];
 
 t_idx = zeros(length(motion_st), 2);
-buffer = [175 35 20 15 15 180];
 for i = 1:length(t_idx)
 	idx = find(t >= motion_st(i));
 	t_idx(i, 1) = idx(1);
@@ -33,7 +34,7 @@ for i = 1:length(t_idx)
 	t_idx(i, 2) = idx2(1);
 end
 % Flight Data
-% airspeed h, alpha, theta, pitch rate, roll rate, yaw rate, loadfactor, 
+% airspeed h, alpha, theta, pitch rate, roll rate, yaw rate
 TAS = fd.Dadc1_tas.data*0.51444444444;
 h = fd.Dadc1_alt.data*0.3048;
 AOA = fd.vane_AOA.data*pi/180;
@@ -44,28 +45,29 @@ roll_rate = fd.Ahrs1_bRollRate.data*pi/180;
 yaw_rate = fd.Ahrs1_bYawRate.data*pi/180;
 delta_e = fd.delta_e.data*pi/180;
 delta_a = fd.delta_a.data*pi/180;
-% Plots
+
+%% Plots
 % Phugoid
 figure();
 i = 1;
-subplot(3, 1, 1)
+subplot(2, 1, 1)
 yyaxis left
 title(eigenMotions(i))
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), TAS((t_idx(i, 1): t_idx(i, 2))));
-ylabel("true airspeed [m/s]")
+ylabel("u [m/s]", "Interpreter", "latex")
 
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), h((t_idx(i, 1): t_idx(i, 2))));
 axis tight
 grid on
-xlabel("time [s]")
-ylabel("altitude [m]")
+xlabel("t [s]", "Interpreter", "latex")
+ylabel("h [m]", "Interpreter", "latex")
 
-subplot(3, 1, 2)
+subplot(2, 1, 2)
 yyaxis left
-ylim([0, 7])
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), AOA((t_idx(i, 1): t_idx(i, 2))));
 ylabel("$$\alpha$$ [rad]", "Interpreter", "latex")
+ylim([0, max(AOA((t_idx(i, 1): t_idx(i, 2)))) + 0.05])
 yyaxis right
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), theta((t_idx(i, 1): t_idx(i, 2))));
 grid on
@@ -73,11 +75,6 @@ ylabel("$$\theta$$ [rad]", "Interpreter", "latex")
 axis tight
 xlabel("t [s]", "Interpreter", "latex")
 
-subplot(3, 1, 3)
-plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), delta_e((t_idx(i, 1): t_idx(i, 2))));
-grid on
-xlabel("t [s]", "Interpreter", "latex")
-ylabel("$$\delta$$ [rad]", "Interpreter", "latex")
 
 % Aperi Roll
 figure();
@@ -152,7 +149,7 @@ grid on
 xlabel("t [s]", "Interpreter", "latex")
 ylabel("$$\dot{\psi}$$ [rad/s]", "Interpreter", "latex")
 
-% Sprial
+% Spiral
 figure();
 i = 6;
 subplot(2, 1, 1)
@@ -162,13 +159,11 @@ plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), TAS((t_idx(i, 1): t_idx(i, 2)
 ylabel("u [m/s]", "Interpreter", "latex")
 
 yyaxis right
-% plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), h((t_idx(i, 1): t_idx(i, 2))));
-% hold on
 plot(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1)), h((t_idx(i, 1): t_idx(i, 2))));
 axis tight
 grid on
 xlabel("t [s]", "Interpreter", "latex")
-ylabel("Altitude [m]", "Interpreter", "latex")
+ylabel("h [m]", "Interpreter", "latex")
 
 subplot(2, 1, 2)
 yyaxis left
