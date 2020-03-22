@@ -15,10 +15,11 @@
 % aerodynamic properties
 e      = 0.8;            % Oswald factor [ ]
 CD0    = 0.04;            % Zero lift drag coefficient [ ]
-CLa    = 5.084;            % Slope of CL-alpha curve [ ]
-
+% CLa    = 5.084;            % Slope of CL-alpha curve [ ]
+CLa    = 5.5009;
 % Longitudinal stability
-Cma    = -0.5626;            % longitudinal stabilty [ ]
+% Cma    = -0.5626;            % longitudinal stabilty [ ]
+Cma    = -0.45;
 Cmde   = -1.1642;            % elevator effectiveness [ ]
 
 % Aircraft geometry
@@ -71,27 +72,26 @@ CD = CD0 + (CLa*alpha0)^2/(pi*A*e);  % Drag coefficient [ ]
 % Stabiblity derivatives
 
 CX0    = W*sin(th0)/(0.5*rho*V0^2*S);
-CXu    = -0.02792;
-% CXu    = -0.11; %
+% CXu    = -0.02792;
+% CXu = -0.095;
+CXu = -0.07; 
 CXa    = -0.47966;
 CXadot = +0.08330;
 CXq    = -0.28170;
 CXde   = -0.03728;
 
 CZ0    = -W*cos(th0)/(0.5*rho*V0^2*S);
-CZu    = -0.37616;
-% CZu    = -2.1;	%
+% CZu    = -0.37616;
+CZu    = -0.5;
 CZa    = -5.74340;
-% CZa    = -6.8;
 CZadot = -0.00350;
-% CZadot = -0.05;
 CZq    = -5.66290;
 CZde   = -0.69612;
 
 Cmu    = +0.06990;
 Cmadot = +0.17800;
-Cmq    = -8.79415;
-
+% Cmq    = -8.79415;
+Cmq    = -10;
 CYb    = -0.7500;
 CYbdot =  0     ;
 CYp    = -0.0304;
@@ -100,12 +100,12 @@ CYda   = -0.0400;
 CYdr   = +0.2300;
 
 Clb    = -0.10260;
-Clp    =  -0.71085 %-0.95 ;
+Clp    = -0.71085;
 Clr    = +0.23760;
 Clda   = -0.23088;
 Cldr   = +0.03440;
 
-Cnb    =  +0.1348  ;%0.11;
+Cnb    =  +0.1348;
 Cnbdot =   0     ;
 Cnp    =  -0.0602;
 Cnr    =  -0.2061;
