@@ -99,7 +99,6 @@ CYr    = +0.8495;
 CYda   = -0.0400;
 CYdr   = +0.2300;
 
-<<<<<<< HEAD
 Clb    = -0.10260; 
 Clp    = -0.71085 ;  %Making it more negative favourable for spiral and aperiodic roll
 Clr    =  0.155; %0.23760;   % Making it small favourable for aperiodic roll but opposite for spiral
@@ -108,15 +107,7 @@ Cldr   =  +0.03440;
 
 Cnb    = 0.11; %+0.1348; % dutch roll period mostly affected
                  % making small helps aperiodic roll but bad for spiral 
-=======
-Clb    = -0.10260;
-Clp    = -0.71085;
-Clr    = +0.23760;
-Clda   = -0.23088;
-Cldr   = +0.03440;
 
-Cnb    =  +0.1348;
->>>>>>> 7f41e62dff90d0587bab7186957742a9d6111866
 Cnbdot =   0     ;
 Cnp    =  -0.0602;
 Cnr    = -0.225 ;%-0.2061;   % making it more negative favourable for aperiodic roll 
