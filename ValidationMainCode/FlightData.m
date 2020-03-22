@@ -1,22 +1,26 @@
 function [FD, eigenMotions] = FlightData()
-	fd = importdata('FTISxprt-20200306_flight3.mat');
+	fd = importdata('C:\Users\Gebruiker\Documents\MATLAB\AE3212SA\GeneralSYMss\FTISxprt-20200306_flight3.mat');
 	t = fd.time.data;
 	% Start time of eigen motions 
 	eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Peroid", ...
-					"Dutch Roll", "Dutch Roll Damped", "Sprial"];
+					"Dutch Roll", "Dutch Roll Damped", "Spiral"];
 
 	aperi_roll_st = 1*3600 + 1*60 + 15;						% Start time aperiodic roll [s]
-	short_peroid_st = 56*60 + 50;							% Start time short period [s] p=44.0333333333 s
+	short_peroid_st = 56*60 + 55;							% Start time short period [s] p=44.0333333333 s
 	dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
 	dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
-	sprial_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
-	phugoid_st = 53*60 + 20;								% Start time phugoid [s]
-
+	spiral_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
+	phugoid_st = 53*60 + 25;								% Start time phugoid [s]
+% 	phugoid_st = 52*60;
 	motion_st = [phugoid_st, aperi_roll_st, short_peroid_st, ...
-		dutch_roll_st, dutch_roll_damp_st, sprial_st];
+		dutch_roll_st, dutch_roll_damp_st, spiral_st];
 
 	t_idx = zeros(length(motion_st), 2);
+<<<<<<< HEAD
 	buffer = [175 25 20 15 15 80];
+=======
+	buffer = [175 35 15 15 15 200];
+>>>>>>> 7f41e62dff90d0587bab7186957742a9d6111866
 	for i = 1:length(t_idx)
 		idx = find(t >= motion_st(i));
 		t_idx(i, 1) = idx(1);
