@@ -5,7 +5,7 @@ aperi_roll_st = 59*60 + 10;							% Start time aperiodic roll [s]
 short_peroid_st = 1*3600 + 0*60 + 33;					% Start time short period [s]
 dutch_roll_st = 1*3600 + 1*60 + 57;					% Start time Dutch roll [s]
 dutch_roll_damp_st = 1*3600 + 2*60 + 47;				% Start time Damped Dutch roll [s]
-sprial_st = 1*3600 + 5*60 + 20;						% Start time sprial [s]
+spiral_st = 1*3600 + 5*60 + 20;						% Start time sprial [s]
 phugoid_st = 53*60 + 51;								% Start time phugoid [s]
 buffer = [211 35 12 12 12 160];
 
@@ -22,9 +22,9 @@ buffer = [211 35 12 12 12 160];
 %% Index Slicing
 t = fd.time.data;
 eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Peroid", ...
-				"Dutch Roll", "Dutch Roll Damped", "Sprial"];
+				"Dutch Roll", "Dutch Roll Damped", "Spiral"];
 motion_st = [phugoid_st, aperi_roll_st, short_peroid_st, ...
-	dutch_roll_st, dutch_roll_damp_st, sprial_st];
+	dutch_roll_st, dutch_roll_damp_st, spiral_st];
 
 t_idx = zeros(length(motion_st), 2);
 for i = 1:length(t_idx)
@@ -149,7 +149,7 @@ grid on
 xlabel("t [s]", "Interpreter", "latex")
 ylabel("$$\dot{\psi}$$ [rad/s]", "Interpreter", "latex")
 
-% Sprial
+% Spiral
 figure();
 i = 6;
 subplot(2, 1, 1)
