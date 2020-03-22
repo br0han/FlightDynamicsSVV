@@ -16,7 +16,7 @@ function [FD, eigenMotions] = FlightData()
 		dutch_roll_st, dutch_roll_damp_st, sprial_st];
 
 	t_idx = zeros(length(motion_st), 2);
-	buffer = [175 35 20 15 15 80];
+	buffer = [175 25 20 15 15 80];
 	for i = 1:length(t_idx)
 		idx = find(t >= motion_st(i));
 		t_idx(i, 1) = idx(1);

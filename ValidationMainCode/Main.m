@@ -1,4 +1,6 @@
-clear; clc; close all;
+clear; 
+
+clc; close all;
 [FD, eigenMotions] = FlightData();			% Get Flight Data (FD) attributes
 InitMass = (9165 + 4100)*0.45359237 + 760;	% Take off mass
 % %% Symmetric Eigenmotions
