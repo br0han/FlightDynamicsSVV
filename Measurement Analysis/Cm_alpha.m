@@ -82,8 +82,8 @@ end
 
 
 
-delta_cg = 0.06;                                       % change in cg  
-delta_elev = (Sde(7,1) -  Sde(6,1))*pi/180;             % change in elevator deflection 
+delta_cg = 0.03818;                                      %[m]  change in cg (first measumernt)
+delta_elev = (Sde(7,1) -  Sde(6,1))*pi/180;             %[rad] change in elevator deflection 
 cm_delta = -1/delta_elev * SCL(7,1) *delta_cg/c;
 
 
