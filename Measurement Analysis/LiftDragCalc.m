@@ -31,7 +31,7 @@ SFUsed=SDat.SampleData(:,6);  %Sample Fuel used       (lbs)
 STemp=SDat.SampleData(:,7);   %Measured Sample Temperature     (Celsius)
 
 SAlt= 0.3048*SAlt ; %Sample Altitude        (m)
-SVelo= 0.514444*SVelo; %Sample Velocity        (m/s)
+SVelo= 0.514444*(SVelo-2); %Sample Velocity        (m/s)
 SAlpha= pi*SAlpha/180; %Sample Angle of Attack (radians)
 SFFl= 0.000125998*SFFl; %Sample Fuel flow left  (kg/s)
 SFFr= 0.000125998*SFFr; %Sample Fuel flow right (kg/s)
@@ -48,7 +48,7 @@ FFUsed=FDat.LiftFlightData(:,6);  %Flight Fuel Used (lbs)
 FTemp=FDat.LiftFlightData(:,7);   %Measured Flight Temperature (Celsius)
 
 FAlt=0.3048*FAlt ; %Flight Altitude (m)
-FVelo=0.514444*FVelo ; %Flight Velocity (m/s)
+FVelo=0.514444*(FVelo-2) ; %Flight Velocity (m/s)
 FAlpha=pi*FAlpha/180 ; %Flight AoA (radians)
 FFFl=0.000125998*FFFl ; %Flight Fuel Flow Left (kg/s)
 FFFr=0.000125998*FFFr ; %Flight Fuel Flow right (kg/s)
@@ -108,8 +108,8 @@ for i=1:sz(1)
 end
 
 
-FThrustL =[3346.92; 2480.35; 2233.03 ;1917.33; 2125.58; 1924.03 ]; %Left Engine Thrust for Flight data
-FThrustR =[3684.7; 2836.5; 2517.5; 2116.72; 2432.98; 2223.14];   %Right Engine Thrust for Flight data
+FThrustL =[3360.76; 2492.98; 2237.92 ;1928.25; 2137.6; 1935.55 ]; %Left Engine Thrust for Flight data
+FThrustR =[3699.37; 2849.93; 2528.81; 2128.31; 2446.03; 2235.69];   %Right Engine Thrust for Flight data
 
 FThrust = FThrustL+FThrustR;
 
