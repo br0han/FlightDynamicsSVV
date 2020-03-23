@@ -6,6 +6,7 @@ g      = 9.81;            % [m/sec^2] (gravity constant)
 p0     = 101325;          % pressure sea level [pascal]
 gamma  = 1.4;             
 S      = 30.00; %(m^2)
+c      = 2.0569;	      % mean aerodynamic cord [m]
 
 %%%%Data
 SDat=load("SampleData.mat"); %Sample Data excluding mass in kg
@@ -123,8 +124,8 @@ Srho= zeros(sz(1),sz(2));
 Frho= zeros(sz(1),sz(2));   
 
 for i= 1:sz(1)
-    Srho(i,1) = Sp(i,1)/(R*ST(i,1));
-    Frho(i,1) = Fp(i,1)/(R*FT(i,1)); 
+    Srho1(i,1) = Sp(i,1)/(R*ST(i,1));
+    Frho2(i,1) = Fp(i,1)/(R*FT(i,1)); 
 end
 
 % calculating the equivelant airspeed 
@@ -136,5 +137,14 @@ for i = 1:sz(1)
     SVeq(i,1) = sqrt(gamma*R*ST(i,1))*SM(i,1)*sqrt(Srho(i,1)/rho0);
 end
 
+% cm_delta  calculations 
 
+%function Cm_d = Cm_delta(d_elev, CN, xcg1, xcg2, ) 
+delta_cg = 0.2;     % redefine 
+delta_elev = 0.2;   % redefine 
+cm_d = -1/delta_elev * FCL(5:1) *delta_cg/c;
+
+
+ELe= load("Elevator.mat"); %Measurements from flight
+S = ELe.SampleData(:,1);
 
