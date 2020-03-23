@@ -1,6 +1,6 @@
 run("Parameters.m")
 %%%%Data
-SDat=load("Elevator.mat"); %Sample Data excluding mass in kg
+SDat=load("Sample_Elevator.mat"); %Sample Data excluding mass in kg
 SMass=load("SampleMasses.mat"); 
 SPMass=SMass.PeopleMasses; %Sample Mass of the people in kg
 
@@ -82,9 +82,11 @@ end
 
 
 
-delta_cg = 0.03818;                                      %[m]  change in cg (first measumernt)
-delta_elev = (Sde(7,1) -  Sde(6,1))*pi/180;             %[rad] change in elevator deflection 
-cm_delta = -1/delta_elev * SCL(7,1) *delta_cg/c;
+Sdelta_cg = -0.03818;                                      %[m]  change in cg (first measumernt)
+Sdelta_elev = (Sde(9,1)   -  Sde(8,1))*pi/180;             %[rad] change in elevator deflection 
+Sdelta_alpha= SAlpha(9,1) - SAlpha(8,1)*pi/180;
+Scm_delta = -1/Sdelta_elev * SCL(9,1) *Sdelta_cg/c;
+Scm_alpha = -Sdelta_elev/Sdelta_alpha *Scm_delta; 
 
 
 
