@@ -126,23 +126,22 @@ end
 
 
 
-Sdelta_cg = -0.03818;        %[m] sample data  change in cg (first measumernt)
-Fdelta_cg =  -0.05474  ;     %[m] flight data  change in cg (first measumernt)  
+Sdelta_cg = -0.038218;        %[m] sample data  change in cg (first measumernt)
+Fdelta_cg = -0.054946;     %[m] flight data  change in cg (first measumernt)  
 
 Sdelta_elev = (Sde(9,1)   -  Sde(8,1))*pi/180;             %[rad] sample change in elevator deflection 
 Fdelta_elev = (Fde(9,1)   -  Fde(8,1))*pi/180;             %[rad] flight change in elevator deflection 
 
-Sdelta_alpha= SAlpha(9,1) - SAlpha(8,1)*pi/180;            %[rad] sample change in alpha   
-Fdelta_alpha= FAlpha(9,1) - FAlpha(8,1)*pi/180;            %[rad] flight change in alpha       
+Sdelta_elev_alpha= -0.4791 ;            %[rad] sample change in alpha   
+Fdelta_elev_alpha= -0.4552 ;           %[rad] flight change in alpha       
 
 
 Scm_delta = -1/Sdelta_elev * SCL(9,1) *Sdelta_cg/c;        % sample cm_delta 
 Fcm_delta = -1/Fdelta_elev * FCL(9,1) *Fdelta_cg/c;         % Flight  cm_delta 
 
 
-Scm_alpha = -Sdelta_elev/Sdelta_alpha *Scm_delta;          % Sample cm_alpha 
-Fcm_alpha = -Fdelta_elev/Fdelta_alpha *Fcm_delta;           % Flight cm_alpha 
+Scm_alpha = -Sdelta_elev_alpha *Scm_delta;          % Sample cm_alpha 
+Fcm_alpha = -Fdelta_elev_alpha *Fcm_delta;           % Flight cm_alpha 
 
-
-
+    
 
