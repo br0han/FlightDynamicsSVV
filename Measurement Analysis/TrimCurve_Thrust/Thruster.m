@@ -5,7 +5,7 @@ FThP = load('FTP.mat');
 stps = SThP.SampleThrustParams;
 ftps = FThP.FlightThrustParams;
 
-%format [hp M FFl FFr DeltaT]
+%format [hp M DeltaT FFl FFr]
 
 S_Thrust = zeros(size(stps, 1), 2);
 F_Thrust = zeros(size(ftps, 1), 2);
@@ -18,10 +18,10 @@ for i = 1:size(stps,1)
 end
 
 for j = 1:size(ftps,1)
-    tempftp = ftps(i, :)
+    tempftp = ftps(j, :);
     dlmwrite('matlab.dat', tempftp, 'delimiter', ' ');
     system('FindThrust.exe');
-    F_Thrust(i, :) = load('thrust.dat');
+    F_Thrust(j, :) = load('thrust.dat');
 end
 
 
