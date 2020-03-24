@@ -40,4 +40,6 @@ function [responce, t_responce] = ASymmStateSpace(hp0, V0, alpha0, th0, beta0, p
 	sys_a.OutputName = {'\beta', '\phi', 'p', 'r'};
 	[responce, t_responce] = lsim(sys_a, input, time, init);
 	responce = responce + [beta0, phi0, p, r];
+    
+    eig(Aa)*(dim_cnst/2)
 end
