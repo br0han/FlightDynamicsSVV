@@ -12,13 +12,13 @@ D      = 0.686;             % random engine diameter [m]
 
 
 CmTc = -0.0064;          % thrust control derivative
-Ws = 60500/9.80665;      % standard aircraft weight [N]
+Ws = 60500/g;      % standard aircraft weight [N]
 
-Scm_delta = -1.046329977000884;
-Fcm_delta = -1.366101036028307;
+Scm_delta = -1.0738;
+Fcm_delta = -1.4070;
 
-Scm_alpha = -0.100463799265000;
-Fcm_alpha =   -0.138995602327464;
+Scm_alpha = -0.5145;
+Fcm_alpha = -0.6405;
 
 
 %%%%Data
@@ -45,7 +45,7 @@ FTotPreMass=PreFuel+EmptyMass +FTotPeopleMass;
 
 %SAMPLE DATA
 SAlt=SDat.SampleData1(1:7,1);    %Sample Altitude               (ft)
-SVelo=SDat.SampleData1(1:7,2);   %Sample Velocity               (kts)
+SVelo=SDat.SampleData1(1:7,2) - 2;   %Sample Velocity               (kts)
 SAlpha=SDat.SampleData1(1:7,3);  %Sample Angle of Attack        (degrees)
 SDelta=SDat.SampleData1(1:7,4);  %Sample Elevator Deflection    (degrees) 
 SFe = SDat.SampleData1(1:7,6);   %Sample Elevator Stick Force   (N) 
@@ -65,7 +65,7 @@ STemp=273.15+STemp ;    %Sample Temperature         (Kelvin)
 
 %FLIGHT DATA
 FAlt=FDat.Data(1:7,1);   %Flight Altitude               (m)
-FVelo=FDat.Data(1:7,2);  %Flight Velocity               (m/s)
+FVelo=FDat.Data(1:7,2) - 2;  %Flight Velocity               (m/s)
 FAlpha=FDat.Data(1:7,3); %Flight Angle of Attack        (degrees)
 FDelta=FDat.Data(1:7,4); %Flight Elevator Deflection    (degrees) 
 FFe = FDat.Data(1:7,6);  %FLight Elevator Stick Force   (N)
@@ -84,8 +84,8 @@ FFUsed=0.453592*FFUsed ; %Flight Fuel used            (kg)
 FTemp=FTemp+273.15 ;     %Flight Temp                 (Kelvin)
 
 
-STempISA=[278.23; 278.21; 278.21; 278.21; 278.21; 278.04; 278.04];
-FTempISA=[264.4; 264.42; 264.4; 264.4; 264.4; 264.4; 264.4]; %CHANGE 
+STempISA=[276.15; 275.58; 275.18; 274.53; 275.96; 276.65; 277.64];
+FTempISA=[260.66; 260.42; 260.40; 260.07; 261.81; 262.60; 263.55]; 
 
 sz=size(SAlt); 
 
@@ -97,8 +97,8 @@ for i= 1:sz(1)
 end
 
 
-SDeltaTemp= STemp-STempISA;
-FDeltaTemp= FTemp-FTempISA;
+SDeltaTemp = STemp-STempISA;
+FDeltaTemp = FTemp-FTempISA;
 
 
 % equivelent airspeed calculations 
@@ -108,8 +108,8 @@ Sp = zeros(sz(1),sz(2));
 
 % pressure at different altitudes 
 for i= 1:sz(1)
-    Sp(i,1) = p0*(1+lambda*SAlt(i,1)/Temp0)^(-g/(lambda*R));
-    Fp(i,1) = p0*(1+lambda*FAlt(i,1)/Temp0)^(-g/(lambda*R));
+    Sp(i,1) = p0*(1+(lambda*SAlt(i,1)/Temp0))^(-g/(lambda*R));
+    Fp(i,1) = p0*(1+(lambda*FAlt(i,1)/Temp0))^(-g/(lambda*R));
 end
 
 %Mach number at different altitudes
@@ -117,8 +117,8 @@ FM = zeros(sz(1), sz(2));
 SM = zeros(sz(1), sz(2));
     
 for i= 1:sz(1)
-    SM(i,1) = sqrt(2/(gamma-1) *((1+ p0/Sp(i,1) *((1+ (gamma-1)*rho0*SVelo(i,1)^2/(2*gamma *p0))^(gamma/(gamma-1))-1))^((gamma -1)/gamma) -1));
-    FM(i,1) = sqrt(2/(gamma-1) *((1+ p0/Fp(i,1) *((1+ (gamma-1)*rho0*FVelo(i,1)^2/(2*gamma *p0))^(gamma/(gamma-1))-1))^((gamma -1)/gamma) -1));
+    SM(i,1) = sqrt(2/(gamma-1) *((1+ p0/Sp(i,1) *((1+ (gamma-1)*rho0*(SVelo(i,1)^2)/(2*gamma *p0))^(gamma/(gamma-1))-1))^((gamma -1)/gamma) -1));
+    FM(i,1) = sqrt(2/(gamma-1) *((1+ p0/Fp(i,1) *((1+ (gamma-1)*rho0*(FVelo(i,1)^2)/(2*gamma *p0))^(gamma/(gamma-1))-1))^((gamma -1)/gamma) -1));
 end 
 
 
@@ -127,11 +127,11 @@ FT = zeros(sz(1), sz(2));
 ST = zeros(sz(1),sz(2));
 
 for i= 1:sz(1)
-    FT(i,1) = FTemp(i,1)/(1+(gamma -1)/2 *FM(i,1)^2);
-    ST(i,1) = STemp(i,1)/(1+(gamma -1)/2 *SM(i,1)^2);
+    FT(i,1) = FTemp(i,1)/(1+(gamma - 1)/2 *FM(i,1)^2);
+    ST(i,1) = STemp(i,1)/(1+(gamma - 1)/2 *SM(i,1)^2);
 end
 
-% calculating the density using ideal gas low
+% calculating the density using ideal gas law
 Srho= zeros(sz(1),sz(2));
 Frho= zeros(sz(1),sz(2));   
 
@@ -140,13 +140,19 @@ for i= 1:sz(1)%used to be Srho1 and Frho2
     Frho(i,1) = Fp(i,1)/(R*FT(i,1)); 
 end
 
-% calculating the equivelant airspeed 
+% calculating the true airspeed and equivelant airspeed 
 FVeq = zeros(sz(1),sz(2));
 SVeq = zeros(sz(1),sz(2));
 
+FVet = zeros(sz(1),sz(2));
+SVet = zeros(sz(1),sz(2));
+
 for i = 1:sz(1)
-    FVeq(i,1) = sqrt(gamma*R*FT(i,1))*FM(i,1)*sqrt(Frho(i,1)/rho0); % true airspeed = M*a , Veq = Vt*sqrt(rho/rho0)
-    SVeq(i,1) = sqrt(gamma*R*ST(i,1))*SM(i,1)*sqrt(Srho(i,1)/rho0);
+    FVet(i,1) = sqrt(gamma*R*FT(i,1))*FM(i,1);
+    SVet(i,1) = sqrt(gamma*R*ST(i,1))*SM(i,1);
+    
+    FVeq(i,1) = FVet(i,1)*sqrt(Frho(i,1)/rho0); % true airspeed = M*a , Veq = Vt*sqrt(rho/rho0)
+    SVeq(i,1) = SVet(i,1)*sqrt(Srho(i,1)/rho0);
 end
 
 
@@ -159,8 +165,8 @@ save TrimCurve_Thrust\FTP FlightThrustParams;
 
 run('TrimCurve_Thrust\Thruster');
 
-S_ActualThrustCoef = (S_Thrust(:, 1) + S_Thrust(:, 2))./(0.5*(D^2)*Srho.*SVelo.^2);
-F_ActualThrustCoef = (F_Thrust(:, 1) + F_Thrust(:, 2))./(0.5*(D^2)*Frho.*FVelo.^2);
+S_ActualThrustCoef = (S_Thrust(:, 1) + S_Thrust(:, 2))./(0.5*(D^2)*Srho.*(SVet.^2));
+F_ActualThrustCoef = (F_Thrust(:, 1) + F_Thrust(:, 2))./(0.5*(D^2)*Frho.*(FVet.^2));
 
 
 %Reduced thrust
@@ -175,20 +181,19 @@ save TrimCurve_Thrust\FTP FlightThrustParams;
 
 run('TrimCurve_Thrust\Thruster.m');
 
-SVeqt = SVeq.*sqrt(Ws./(STotPreMass - SFUsed));
-FVeqt = FVeq.*sqrt(Ws./(FTotPreMass - FFUsed));
+SVeqr = SVeq.*sqrt(Ws./(STotPreMass - SFUsed));
+FVeqr = FVeq.*sqrt(Ws./(FTotPreMass - FFUsed));
 
 
-S_ReducedThrustCoef = (S_Thrust(:, 1) + S_Thrust(:, 2))./(0.5*(D^2)*Srho.*SVelo.^2);
-F_ReducedThrustCoef = (F_Thrust(:, 1) + F_Thrust(:, 2))./(0.5*(D^2)*Frho.*FVelo.^2);
+S_ReducedThrustCoef = (S_Thrust(:, 1) + S_Thrust(:, 2))./(0.5*(D^2)*Srho.*(SVet.^2));
+F_ReducedThrustCoef = (F_Thrust(:, 1) + F_Thrust(:, 2))./(0.5*(D^2)*Frho.*(FVet.^2));
 
 
 %trim curve
 SDelta_eq = SDelta - (CmTc/Scm_delta)*(S_ReducedThrustCoef - S_ActualThrustCoef);
 FDelta_eq = FDelta - (CmTc/Fcm_delta)*(F_ReducedThrustCoef - F_ActualThrustCoef);
 
-SVeqt = SVeq.*sqrt(Ws./(STotPreMass - SFUsed));
-FVeqt = FVeq.*sqrt(Ws./(FTotPreMass - FFUsed));
+
 
 
 %force curve
@@ -196,10 +201,17 @@ SFe_eq = SFe.*(Ws./(STotPreMass - SFUsed));
 FFe_eq = FFe.*(Ws./(FTotPreMass - FFUsed));
 
 
+FVeqrplot = sort(FVeqr);
+FDelta_eqplot = sort(FDelta_eq);%(sorting);
+FFe_eqplot = sort(FFe_eq);
+SVeqrplot = sort(SVeqr);
+SDelta_eqplot = sort(SDelta_eq);
+SFe_eqplot = sort(SFe_eq);
+
 %plots
 figure();
 subplot(1,2,1);
-plot(FVeqt, FDelta_eq*180/pi, 'o');
+plot(FVeqrplot, FDelta_eqplot*180/pi, 'o-');
 set(gca, 'YDir','reverse')
 title('Trim Curve (flight)')
 grid on
@@ -207,7 +219,7 @@ xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
 ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
 
 subplot(1,2,2);
-plot(FVeqt, FFe_eq, 'x');
+plot(FVeqrplot, FFe_eqplot, 'x-');
 set(gca, 'YDir','reverse')
 title('Force Curve (flight)')
 grid on
@@ -215,22 +227,22 @@ xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
 ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
 
 
-% figure();
-% subplot(1,2,1);
-% plot(SVeqt, SDelta_eq*180/pi, 'o');
-% set(gca, 'YDir','reverse')
-% title('Trim Curve (sample)')
-% grid on
-% xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-% ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
-% 
-% subplot(1,2,2);
-% plot(SVeqt, SFe_eq, 'x');
-% set(gca, 'YDir','reverse')
-% title('Force Curve (sample)')
-% grid on
-% xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-% ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
+figure();
+subplot(1,2,1);
+plot(SVeqrplot, SDelta_eqplot*180/pi, 'o-');
+set(gca, 'YDir','reverse')
+title('Trim Curve (sample)')
+grid on
+xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
+ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
+
+subplot(1,2,2);
+plot(SVeqrplot, SFe_eqplot, 'x-');
+set(gca, 'YDir','reverse')
+title('Force Curve (sample)')
+grid on
+xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
+ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
 
 
 
