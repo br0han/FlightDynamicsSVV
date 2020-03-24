@@ -9,12 +9,12 @@ S      = 30.00; %(m^2)
 c      = 2.0569;	      % mean aerodynamic cord [m]
 
 %%%%Data
-SDat=load("SampleData.mat"); %Sample Data excluding mass in kg
-SMass=load("SampleMasses.mat"); 
+SDat = load("Sample_Elevator.mat"); %Sample Data excluding mass in kg
+SMass = load("SampleMasses.mat"); 
 SPMass=SMass.PeopleMasses; %Sample Mass of the people in kg
 
 
-FDat=load("LiftFlightData.mat"); %Measurements from flight
+FDat=load("Flight_Set2.mat"); %Measurements from flight
 FMass=load("FlightMassData"); %Mass data from flight
 FPMass=FMass.FlightData;
 
@@ -31,13 +31,13 @@ STotPreMass=PreFuel+EmptyMass +STotPeopleMass;
 FTotPreMass=PreFuel+EmptyMass +FTotPeopleMass;
 
 %SAMPLE DATA
-SAlt=SDat.SampleData(:,1);    %Sample Altitude        (ft)
-SVelo=SDat.SampleData(:,2);   %Sample Velocity        (kts)
-SAlpha=SDat.SampleData(:,3);  %Sample Angle of Attack (degrees)
-SFFl=SDat.SampleData(:,4);    %Sample Fuel flow left  (lbs/hr)
-SFFr=SDat.SampleData(:,5);    %Sample Fuel flow right (lbs/hr)
-SFUsed=SDat.SampleData(:,6);  %Sample Fuel used       (lbs)
-STemp=SDat.SampleData(:,7);   %Sample Temperature     (Celsius)
+SAlt=SDat.SampleData1(1:7,1);    %Sample Altitude        (ft)
+SVelo=SDat.SampleData1(1:7,2);   %Sample Velocity        (kts)
+SAlpha=SDat.SampleData1(1:7,3);  %Sample Angle of Attack (degrees)
+SFFl=SDat.SampleData1(1:7,7);    %Sample Fuel flow left  (lbs/hr)
+SFFr=SDat.SampleData1(1:7,8);    %Sample Fuel flow right (lbs/hr)
+SFUsed=SDat.SampleData1(1:7,9);  %Sample Fuel used       (lbs)
+STemp=SDat.SampleData1(1:7,10);   %Sample Temperature     (Celsius)
 
 SAlt= 0.3048*SAlt ; %Sample Altitude        (m)
 SVelo= 0.514444*SVelo; %Sample Velocity        (m/s)
@@ -48,13 +48,13 @@ SFUsed=0.453592*SFUsed; %Sample Fuel used       (kg)
 STemp=273.15+STemp ;  %Sample Temperature     (Kelvin)  
 
 %FLIGHT DATA
-FAlt=FDat.LiftFlightData(:,1);  %Flight Altitude (m)
-FVelo=FDat.LiftFlightData(:,2); %Flight Velocity (m/s)
-FAlpha=FDat.LiftFlightData(:,3); %Flight Angle of Attack (degrees)
-FFFl=FDat.LiftFlightData(:,4);   %Flight Fuel Flow left (lbs/hr)
-FFFr=FDat.LiftFlightData(:,5);   %Flight Fuel flow right (lbs/hr)
-FFUsed=FDat.LiftFlightData(:,6);  %Flight Fuel Used (lbs)
-FTemp=FDat.LiftFlightData(:,7);   %Flight Temperature (Celsius)
+FAlt=FDat.Data(1:7,1);  %Flight Altitude (m)
+FVelo=FDat.Data(1:7,2); %Flight Velocity (m/s)
+FAlpha=FDat.Data(1:7,3); %Flight Angle of Attack (degrees)
+FFFl=FDat.Data(1:7,7);   %Flight Fuel Flow left (lbs/hr)
+FFFr=FDat.Data(1:7,8);   %Flight Fuel flow right (lbs/hr)
+FFUsed=FDat.Data(1:7,9);  %Flight Fuel Used (lbs)
+FTemp=FDat.Data(1:7,10);   %Flight Temperature (Celsius)
 
 FAlt=0.3048*FAlt ; %Flight Altitude (m)
 FVelo=0.514444*FVelo ; %Flight Velocity (m/s)
@@ -65,8 +65,8 @@ FFUsed=0.453592*FFUsed ; %Flight Fuel used (kg)
 FTemp=FTemp+273.15 ; %(Kelvin)
 
 
-STempISA=[278.23; 278.21; 278.21; 278.21; 278.21; 278.04];
-FTempISA=[264.4; 264.42; 264.4; 264.4; 264.4; 264.4;];
+STempISA=[278.23; 278.21; 278.21; 278.21; 278.21; 278.04; 278.04];
+FTempISA=[264.4; 264.42; 264.4; 264.4; 264.4; 264.4; 264.4];
 
 sz=size(SAlt); 
 
@@ -123,9 +123,9 @@ end
 Srho= zeros(sz(1),sz(2));
 Frho= zeros(sz(1),sz(2));   
 
-for i= 1:sz(1)
-    Srho1(i,1) = Sp(i,1)/(R*ST(i,1));
-    Frho2(i,1) = Fp(i,1)/(R*FT(i,1)); 
+for i= 1:sz(1)%used to be Srho1 and Frho2
+    Srho(i,1) = Sp(i,1)/(R*ST(i,1));
+    Frho(i,1) = Fp(i,1)/(R*FT(i,1)); 
 end
 
 % calculating the equivelant airspeed 
@@ -139,12 +139,26 @@ end
 
 % cm_delta  calculations 
 
-%function Cm_d = Cm_delta(d_elev, CN, xcg1, xcg2, ) 
-delta_cg = 0.2;     % redefine 
-delta_elev = 0.2;   % redefine 
-cm_d = -1/delta_elev * FCL(5:1) *delta_cg/c;
+% %function Cm_d = Cm_delta(d_elev, CN, xcg1, xcg2, ) 
+% delta_cg = 0.2;     % redefine 
+% delta_elev = 0.2;   % redefine 
+% cm_d = -1/delta_elev * FCL(5:1) *delta_cg/c;
+
+%run('Cm_alpha.m');
+
+SampleThrustParams = [SAlt SM SDeltaTemp SFFl SFFr]; 
+FlightThrustParams = [FAlt FM FDeltaTemp FFFl FFFr];
+
+save TrimCurve_Thrust\STP SampleThrustParams;
+save TrimCurve_Thrust\FTP FlightThrustParams;
+
+run('TrimCurve_Thrust\Thruster');
+
+%Sample thrust: S_Thrust
+%Flight thrust: F_Thrust
+
+ELe= load("Sample_Elevator.mat"); %Measurements from flight
+%S = ELe.SampleData1(:,1);
 
 
-ELe= load("Elevator.mat"); %Measurements from flight
-S = ELe.SampleData(:,1);
 
