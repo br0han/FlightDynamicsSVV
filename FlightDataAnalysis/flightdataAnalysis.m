@@ -1,23 +1,23 @@
 clear; clc; close all;
 %% Start time of eigenmotions (Reference Data)
-fd = importdata('matlab.mat');
-aperi_roll_st = 59*60 + 10;							% Start time aperiodic roll [s]
-short_peroid_st = 1*3600 + 0*60 + 33;					% Start time short period [s]
-dutch_roll_st = 1*3600 + 1*60 + 57;					% Start time Dutch roll [s]
-dutch_roll_damp_st = 1*3600 + 2*60 + 47;				% Start time Damped Dutch roll [s]
-spiral_st = 1*3600 + 5*60 + 20;						% Start time sprial [s]
-phugoid_st = 53*60 + 51;								% Start time phugoid [s]
-buffer = [211 35 12 12 12 160];
+% fd = importdata('matlab.mat');
+% aperi_roll_st = 59*60 + 10;							% Start time aperiodic roll [s]
+% short_peroid_st = 1*3600 + 0*60 + 33;					% Start time short period [s]
+% dutch_roll_st = 1*3600 + 1*60 + 57;					% Start time Dutch roll [s]
+% dutch_roll_damp_st = 1*3600 + 2*60 + 47;				% Start time Damped Dutch roll [s]
+% spiral_st = 1*3600 + 5*60 + 20;						% Start time sprial [s]
+% phugoid_st = 53*60 + 51;								% Start time phugoid [s]
+% buffer = [211 35 12 12 12 160];
 
 %% Start time of eigenmotions (Our Filight data)
-% fd = importdata('FTISxprt-20200306_flight3.mat');
-% aperi_roll_st = 1*3600 + 1*60 + 15;						% Start time aperiodic roll [s]
-% short_peroid_st = 56*60 + 50;							% Start time short period [s]
-% dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
-% dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
-% spiral_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
-% phugoid_st = 53*60 + 20;								% Start time phugoid [s]
-% buffer = [175 35 20 15 15 180];
+fd = importdata('FTISxprt-20200306_flight3.mat');
+aperi_roll_st = 1*3600 + 1*60 + 15;						% Start time aperiodic roll [s]
+short_peroid_st = 56*60 + 50;							% Start time short period [s]
+dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
+dutch_roll_damp_st = 59*60 + 20;						% Start time Damped Dutch roll [s]
+spiral_st = 1*3600 + 3*60 + 53;							% Start time sprial [s]
+phugoid_st = 53*60 + 20;								% Start time phugoid [s]
+buffer = [175 35 20 15 15 180];
 
 %% Index Slicing
 t = fd.time.data;
