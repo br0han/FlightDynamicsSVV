@@ -10,7 +10,7 @@ clear; clc; close all;
 % buffer = [211 35 12 12 12 160];
 
 %% Start time of eigenmotions (Our Filight data)
-fd = importdata('FTISxprt-20200306_flight3.mat');
+fd = importdata('FTISxprt-20200306_flight3V1.mat');
 aperi_roll_st = 1*3600 + 1*60 + 15;						% Start time aperiodic roll [s]
 short_peroid_st = 56*60 + 50;							% Start time short period [s]
 dutch_roll_st = 57*60 + 94;								% Start time Dutch roll [s]
@@ -21,7 +21,7 @@ buffer = [175 35 20 15 15 180];
 
 %% Index Slicing
 t = fd.time.data;
-eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Peroid", ...
+eigenMotions = ["Phugoid", "Aperiodic Roll", "Short Period", ...
 				"Dutch Roll", "Dutch Roll Damped", "Spiral"];
 motion_st = [phugoid_st, aperi_roll_st, short_peroid_st, ...
 	dutch_roll_st, dutch_roll_damp_st, spiral_st];
@@ -45,23 +45,6 @@ roll_rate = fd.Ahrs1_bRollRate.data*pi/180;
 yaw_rate = fd.Ahrs1_bYawRate.data*pi/180;
 delta_e = fd.delta_e.data*pi/180;
 delta_a = fd.delta_a.data*pi/180;
-
-% DATA for eigenvalues
-i = 1; %phugoid
-Phugoid_V = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), TAS(t_idx(i, 1): t_idx(i, 2))];
-Phugoid_th = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), theta(t_idx(i, 1): t_idx(i, 2))];
-TAS_data_P = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), TAS(t_idx(i, 1): t_idx(i, 2))];
-
-i = 4; %Dutch roll
-Dutch_rollrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), roll_rate(t_idx(i, 1): t_idx(i, 2))];
-Dutch_yawrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), yaw_rate(t_idx(i, 1): t_idx(i, 2))];
-TAS_data_D = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), TAS(t_idx(i, 1): t_idx(i, 2))];
-
-
-i = 5; %Damped Dutch roll
-D_Dutch_rollrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), roll_rate(t_idx(i, 1): t_idx(i, 2))];
-D_Dutch_yawrate = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), yaw_rate(t_idx(i, 1): t_idx(i, 2))];
-TAS_data_DD = [transpose(t(t_idx(i, 1): t_idx(i, 2)) - t(t_idx(i, 1))), TAS(t_idx(i, 1): t_idx(i, 2))];
 
 %% Plots
 % Phugoid
