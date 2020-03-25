@@ -137,7 +137,7 @@ Fdelta_elev_alpha= -0.4552 ;           %[rad] flight change in alpha
 
 
 Scm_delta = -1/Sdelta_elev * SCL(9,1) *Sdelta_cg/c;        % sample cm_delta 
-Fcm_alpha = -1/Fdelta_elev * FCL(9,1) *Fdelta_cg/c;         % Flight  cm_delta 
+Fcm_delta = -1/Fdelta_elev * FCL(9,1) *Fdelta_cg/c;         % Flight  cm_delta 
 
 
 Scm_alpha = -Sdelta_elev_alpha *Scm_delta;          % Sample cm_alpha 
