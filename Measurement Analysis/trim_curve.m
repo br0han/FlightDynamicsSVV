@@ -12,7 +12,7 @@ D      = 0.686;             % random engine diameter [m]
 
 
 CmTc = -0.0064;          % thrust control derivative
-Ws = 60500/g;      % standard aircraft weight [N]
+Ws = 60500/g;      % standard aircraft weight [kg]
 
 Scm_delta = -1.0738;
 Fcm_delta = -1.4070;
@@ -210,39 +210,46 @@ SFe_eqplot = sort(SFe_eq);
 
 %plots
 figure();
-subplot(1,2,1);
+
 plot(FVeqrplot, FDelta_eqplot*180/pi, 'o-');
+hold on;
+plot(SVeqrplot, SDelta_eqplot*180/pi, 'x-');
 set(gca, 'YDir','reverse')
-title('Trim Curve (flight)')
+title('Trim Curves')
 grid on
-xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
-
-subplot(1,2,2);
-plot(FVeqrplot, FFe_eqplot, 'x-');
-set(gca, 'YDir','reverse')
-title('Force Curve (flight)')
-grid on
-xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
-
+xlabel("$$\tilde{V}_{eq}$$ [m/s]", "Interpreter", "latex", 'FontSize', 15)
+ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex",  'FontSize', 15)
+legend(['Flight data' newline 'x_{cg} = 0.363 [mac] '], ['Reference data' newline 'x_{cg} = 0.368 [mac]'], 'FontSize', 15)
 
 figure();
-subplot(1,2,1);
-plot(SVeqrplot, SDelta_eqplot*180/pi, 'o-');
-set(gca, 'YDir','reverse')
-title('Trim Curve (sample)')
-grid on
-xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
 
-subplot(1,2,2);
+plot(FVeqrplot, FFe_eqplot, 'o-');
+hold on;
 plot(SVeqrplot, SFe_eqplot, 'x-');
 set(gca, 'YDir','reverse')
-title('Force Curve (sample)')
+title('Force Curves')
 grid on
-xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
-ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
+xlabel("$$\tilde{V}_{eq}$$ [m/s]", "Interpreter", "latex", 'FontSize', 15)
+ylabel("$$F_{e_{aer}}^{*}$$ [N]", "Interpreter", "latex", 'FontSize', 15)
+legend(['Flight data' newline '\delta_{t_e} = 2.4 [deg]' newline 'x_{cg} = 0.363 [mac] '], ['Reference data' newline '\delta_{t_e} = 2.8 [deg]' newline 'x_{cg} = 0.368 [mac]'], 'FontSize', 15)
+
+
+% figure();
+% subplot(1,2,1);
+% plot(SVeqrplot, SDelta_eqplot*180/pi, 'o-');
+% set(gca, 'YDir','reverse')
+% title('Trim Curve (sample)')
+% grid on
+% xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
+% ylabel("$$\delta_{eq}^*$$ [deg]", "Interpreter", "latex")
+% 
+% subplot(1,2,2);
+% plot(SVeqrplot, SFe_eqplot, 'x-');
+% set(gca, 'YDir','reverse')
+% title('Force Curve (sample)')
+% grid on
+% xlabel("$$\tilde{V_{eq}}$$ [m/s]", "Interpreter", "latex")
+% ylabel("$$F_{e_{aer}}^{*}$$ [deg]", "Interpreter", "latex")
 
 
 
