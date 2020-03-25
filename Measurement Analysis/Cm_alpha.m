@@ -20,11 +20,11 @@ FTotPeopleMass=sum(FPMass);
 
 STotPreMass=PreFuel+EmptyMass +STotPeopleMass;
 FTotPreMass=PreFuel+EmptyMass +FTotPeopleMass;
-
+calibration = 2*ones(9,1);
 
 %Sample Data
 SAlt=SDat.SampleData1(:,1);    %Sample Altitude        (ft)
-SVelo=SDat.SampleData1(:,2);   %Sample Velocity        (kts)
+SVelo=SDat.SampleData1(:,2) - calibration;   %Sample Velocity        (kts)
 SAlpha=SDat.SampleData1(:,3);  %Sample Angle of Attack (degrees)
 Sde  =SDat.SampleData1(:,4);   % Sample Deflection     (degress)
 
@@ -46,7 +46,7 @@ STemp= 273.15+STemp ;  %Measured Sample Temperature     (Kelvin)
 %Flight data 
 
 FAlt  = FDat.Flight_Elevator(:,1);    %Sample Altitude        (ft)
-FVelo =FDat.Flight_Elevator(:,2);   %Sample Velocity        (kts)
+FVelo =FDat.Flight_Elevator(:,2)- calibration;   %Sample Velocity        (kts)
 FAlpha=FDat.Flight_Elevator(:,3);  %Sample Angle of Attack (degrees)
 Fde  =FDat.Flight_Elevator(:,4);   % Sample Deflection     (degress)
 

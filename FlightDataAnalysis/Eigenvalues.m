@@ -4,9 +4,9 @@ close all;
 
 %Period Calculator (uses peaks and the distance between these as period)
 
-r = 1;%input("1 for reference; 0 for flight data: "); %reference data: 0 if no, 1 if yes
+r = 0;%input("1 for reference; 0 for flight data: "); %reference data: 0 if no, 1 if yes
 %lst_data = [Phugoid_V,Phugoid_th,Dutch_yawrate,Dutch_rollrate,D_Dutch_yawrate,D_Dutch_rollrate];
-s = input("choose data: ")%3;%input("data source: ");%3;%choose which data set
+s = input("choose data: ");%3;%input("data source: ");%3;%choose which data set
 
 if r == 0
     lst_dst = [20,10,1,1,1,1]; %minimum distance between peaks
@@ -17,7 +17,7 @@ if r == 1
     lst_tres = [1e-4,1e-8,1e-5,1e-5,3e-4,1e-4]; %minimum hight change between peaks
 end
 
-
+%selects data set
 if s == 1
     data = Phugoid_V;
 end
@@ -40,10 +40,11 @@ end
 Thres = lst_tres(s);
 dist = lst_dst(s);
 
-
+%find peaks
 t = data(:,1); y = data(:,2);
 y = max(max(y)-y,y-min(y));
 [PV_y,PV_t] = findpeaks(y,t,'minpeakdistance',dist,'Threshold',Thres);
+%remove wrong peaks
 if s == 1 && r == 0
     PV_t = PV_t(2:end);
 end
@@ -56,6 +57,7 @@ end
 if r == 1 && s == 4
     PV_t = PV_t(2:end);
 end
+%combine peaks and time location
 peaks = [];
 for q = 1:length(PV_t)
     t_i = PV_t(q);
@@ -66,6 +68,7 @@ end
 PV_t = [PV_t, peaks];
 final =  mean(PV_t(:,2));
 
+%find period
 Periods = [];
 for q = 1:length(PV_t)-1
     Per  = 2*(PV_t(q+1,1)-PV_t(q,1));
@@ -75,9 +78,9 @@ for q = 1:length(PV_t)-1
         Periods = [Periods ; Per];
     end
 end
+Q = mean(Periods)
 
-Q = mean(Periods);
-
+%set dimension and velocity
 c = 2.0569;
 if s == 1 || s == 2
     V0 = TAS_data_P(1,2);
@@ -89,20 +92,21 @@ if s == 5 || s == 6
     V0 = TAS_data_P(1,2);
 end
 
-%Amplitudes
+%change to span if assymetric
 if s == 3 || s == 4 || s == 5 || s == 6
     final = 0;% data(1,2);
     c = 15.911;
-    V0 = 2*V0;
 end
 
-dev_avg = abs(data(:,2)-final);
 
+%get absolute value around the average
+dev_avg = abs(data(:,2)-final);
 peaks_avg = abs(PV_t(:,2)-final);
 
+%exponential function dataset from excel. Function: y=ae^(bx)
 eq = [];
 for q = data(:,1)
-    if r == 0
+    if r == 0 %if flight data
         if s == 1
             a = 7.0437;
             b = -0.004;
@@ -146,7 +150,8 @@ for q = data(:,1)
             delta = 6;
         end    
     end
-    if r == 1
+    
+    if r == 1 %if reference data
         if s == 1
             a = 7.63;
             b = -0.005;
@@ -194,15 +199,15 @@ for q = data(:,1)
     eq_d = a*exp(b*(q-delta));
 end
 
-%get the eigenvalue
+%halftime
 x = [data(:,1),eq];
 half = log((x(1,2)/2)/a)/b;
 
 
-
+%get eigenvalue
 V = V0;
-eta = 2*pi/Q * c/V
-xi = log(1/2)/half * c/V
+eta = 2*pi/Q * c/V;
+xi = log(1/2)/half * c/V;
 
 eigenvalue1 = complex(xi,eta);
 eigenvalue2 = conj(eigenvalue1);
@@ -238,9 +243,3 @@ plot(data(:,1),eq_d);
 hold on
 plot(data(:,1),abs(test_lst));
 hold off
-
-
-
-
-
-    
